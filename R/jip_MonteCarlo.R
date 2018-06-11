@@ -15,20 +15,16 @@
 #' @param units id of units for which probabilities have to be estimated.
 #'        Optional, if missing, estimates are produced for the whole population
 #' @param seed a valid seed value for reproducibility
-#' @param asDataFrame logical, should output be in a data.frame form? if FALSE,
+#' @param as_data_frame logical, should output be in a data.frame form? if FALSE,
 #' a matrix is returned
 #' @param design_pars only used when a function is passed to argument \code{design},
 #'        list of parameters to pass to the sampling design function.
-#'
-#' @param writeOnFile logical, should output be written on a text file?
-#' @param file_path path of the directory where the text file should be created,
-#' valid only if \code{writeOnFile} is TRUE
-#' @param by integer scalar indicating every how many replications a partial output
+#' @param write_on_file logical, should output be written on a text file?
+#' @param file_path string indicating the path to the directory where the text
+#' file with the output should be created, used only if \code{write_on_file} is TRUE.
+#' It should never end with a trailing slash '/',
+#' @param by optional; integer scalar indicating every how many replications a partial output
 #' should be saved
-#' @param spMat a matrix of spatial contiguity among areas, only used for
-#' FPDUST sampling
-#' @param beta beta parameter to be used in FPDUST sampling (\code{beta<1})
-
 #'
 #' @details
 #' Argument \code{design} accepts either a string indicating the sampling design
@@ -43,7 +39,12 @@
 #' if \code{units} is not specified, otherwise it must have the same length of \code{units}.
 #'
 #'
-#' @return A matrix of estimated inclusion probabilities
+#' @return A matrix of estimated inclusion probabilities if \code{as_data_frame=FALSE},
+#' otherwise a data.frame with three columns: the first two indicate the id of
+#' the couple of units, while the third one contains the joint-inclusion probability
+#' values. Please, note that when \code{as_data_frame=TRUE}, first-order
+#' inclusion probabilities are not returned.
+#'
 #'
 #' @examples
 #' ### Generate population data ---
@@ -55,10 +56,18 @@
 #'
 #' pik  <- n * x/sum(x)
 #'
-#' jipSim(x=pik, n = n, replications = 100, design = "brewer")
+#' ### Approximate joint-inclusion probabilities
+#' pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "brewer")
+#' pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "tille")
+#' pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "maxEntropy")
+#' pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "randomSystematic")
+#' pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "systematic")
+#' pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "sampford")
+#' pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "poisson")
+#'
+#'
 #'
 #' @export
-#'
 #'
 #' @importFrom sampling inclusionprobabilities srswor UPrandomsystematic UPpoisson
 #'
@@ -67,12 +76,10 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
                            design,
                            units,
                            seed = NULL,
-                           asDataFrame = FALSE,
-                           writeOnFile = TRUE,
+                           as_data_frame = FALSE,
+                           write_on_file = FALSE,
                            file_path,
-                           by = 5e05,
-                           spMat = NULL, #only used for FPDUST and FPDUST_PPS sampling
-                           beta = NULL #only used for FPDUST and FPDUST_PPS sampling
+                           by = NULL
 ){
 
     ### Check input ------------------------------------------------------------
@@ -83,9 +90,7 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
                                   'randomSystematic',
                                   'sampford',
                                   'poisson',
-                                  'systematic',
-                                  'fpdust',
-                                  'fpdust_pps' )
+                                  'systematic')
     )
 
     ## x
@@ -128,22 +133,30 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
     ## replications
     if(!is.numeric(replications) || replications < 2){
         stop("Not a valid replications number, it should be a number greater than 1")
-    } else if(replications < 1000) warning("Number of iterations is too small. Please, consider using a higher value for M")
+    } else if(replications < 1000)
+        message("The number of Monte Carlo replications is too small, estimates may be unreliable!")
 
 
-    #
-    # ## file_path
-    # if(writeOnFile & missing(file_path)) file_path <- getwd()
-    # ## writeOnFile
-    # if(writeOnFile){
-    #     if(!dir.exists(file_path)) dir.create(file_path, showWarnings = TRUE, recursive = TRUE)
-    # }
-    # ## by
-    # if(writeOnFile &  !is.numeric(by)) stop("parameter 'by' should be an integer scalar")
-    # if(writeOnFile & by > replications) message("parameter 'by' should be smaller than number of replications, no file will be written")
-    #
 
+    ## file_path
+    if( write_on_file ){
+        #file_path
+        if( missing(file_path) ) file_path <- getwd()
+        if( !is.character(file_path) ) stop("file_path should be a string!")
+        if(!dir.exists(file_path)){
+            dc <- dir.create(file_path, showWarnings = TRUE, recursive = TRUE)
+            if( !dc ) stop("There is no folder at the path specified in file_path ",
+                           "and the creation of a new directory failed, please provide a path to an existing directory!")
+        }
+        #by
+        if( is.null(by) ) by <- replications
+        if( !is.numeric(by) ) stop("Argument 'by' should be a positive integer scalar")
+        if( by > replications) by <- replications
 
+        # print path
+        message("Output will be written in the directory: ", file_path)
+
+    }
 
 
 
@@ -153,6 +166,7 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
     if( identical(design, "systematic") ){
         counts <- matrix(0,k,k)
     }else counts <- matrix(1,k,k)
+
     pb <- txtProgressBar(min = 0, max = replications, style = 3) # Progress bar
 
     if( is.character(design)){
@@ -174,8 +188,6 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
                        'sampford' = pre,
                        'poisson' = list(pik=pik),
                        'systematic' = list(pik=pik)
-                       # 'fpdust' = list(spMat=spMat, n=n, beta=beta),
-                       # 'fpdust_pps' = list(spMat=spMat, X=x, n=n, beta=beta)
         )
         # sampling function
         smplFUN <- switch(EXPR=design,
@@ -186,8 +198,6 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
                           'sampford' = sampford,
                           'poisson' = sampling::UPpoisson,
                           'systematic' = sampling::UPsystematic
-                          # 'fpdust' = list(spMat=spMat, n=n, beta=beta),
-                          # 'fpdust_pps' = list(spMat=spMat, X=X, n=n, beta=beta)
         )
     }else if( is.function(design) ){
         pars    <- design_pars
@@ -202,25 +212,22 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
 
         s <- do.call(smplFUN,pars) ### vector of 0 and 1
         counts <- counts + outer(s[units],s[units], "*")
-        # if(writeOnFile & (r %% by == 0)){
-        #     savepartial(r, replications, by, counts, units, file_path, asDataFrame)
-        # }
+        if(write_on_file){
+            if(r %% by == 0){
+                savepartial(r, design, counts, units, file_path, as_data_frame)
+            }
+        }
     }
     close(pb)
     ### ----
 
     ### Return estimates ----
-    jips <- counts/(replications+1)
+    M <- ifelse( identical(design, "systematic"), replications, replications+1)
+    jips <- counts/M
     colnames(jips) <- rownames(jips) <- as.character(units)
 
-    # if(asDataFrame){
-    #     # Joint inclusion probabilities, from matrix to data frame
-    #     jip_v <- vector()
-    #     for(i in 2:n){
-    #         jip_v <- c(jip_v, jips[(i-1),i:n])
-    #     }
-    #     jips <- data.frame(i=couples[1,],j=couples[2,], pi_ij=jip_v)
-    # }
+    # change class, from matrix to data frame
+    if(as_data_frame) jips <- jipMtoDF(jips, id=units)
 
     ### Output
     return(jips)

@@ -47,31 +47,23 @@ excludeSSU <- function(pik, eps = 1e-06){
 #' current replication
 #' @param units id of units for which output should be saved
 #' @param file_path path of the file to write
-#' @param asDataFrame logical, should output be in form of a data frame?
+#' @param as_data_frame logical, should output be in form of a data frame?
 #'
 #'
 #' @keywords internal
 
 savepartial <- function(iteration,
-                        replications,
-                        by,
+                        design,
                         counts,
                         units,
                         file_path,
-                        asDataFrame){
+                        as_data_frame){
 
     #get data ready
-    jips <- counts/iteration
-    colnames(jips) <- as.character(units)
-    rownames(jips) <- colnames(jips)
-    if(asDataFrame){
-        # Joint inclusion probabilities, from matrix to data frame
-        jip_v <- vector()
-        for(i in 2:n){
-            jip_v <- c(jip_v, jips[(i-1),i:n])
-        }
-        jips <- data.frame(i=couples[1,],j=couples[2,], pi_ij=jip_v)
-    }
+    M <- ifelse( identical(design, "systematic"), iteration, iteration+1)
+    jips <- counts/M
+    colnames(jips) <- rownames(jips)  <- as.character(units)
+    if(as_data_frame) jips <- jipMtoDF(jips, id=units )
 
     #number of iteration string to append to file name
     if( iteration<1e03){
@@ -89,7 +81,7 @@ savepartial <- function(iteration,
     }else niter <- sprintf("%i",iteration)
 
     #write output on file
-    write.table(jips, file = paste(file_path,'_',niter,'.txt',sep=''))
+    write.table(jips, file = paste0(file_path, '/', design, '_',niter,'.txt',sep=''))
     Sys.sleep(.1)
 }
 
@@ -113,7 +105,7 @@ jipMtoDF <- function(jipmat, id=NULL){
         couples <- combn(id,2)
     }else couples <- combn(1:n,2)
 
-    return(data.frame(i=couples[1,],j=couples[2,], pi_ij=jip_v))
+    return(data.frame(pi=couples[1,],pj=couples[2,], pij=jip_v))
 }
 
 

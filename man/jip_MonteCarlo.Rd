@@ -5,8 +5,7 @@
 \title{Approximate inclusion probabilities by Monte Carlo simulation}
 \usage{
 jip_MonteCarlo(x, n, replications = 1e+06, design, units, seed = NULL,
-  asDataFrame = FALSE, writeOnFile = TRUE, file_path, by = 5e+05,
-  spMat = NULL, beta = NULL)
+  as_data_frame = FALSE, write_on_file = FALSE, file_path, by = NULL)
 }
 \arguments{
 \item{x}{size measure or first-order inclusion probabilities}
@@ -24,27 +23,27 @@ Optional, if missing, estimates are produced for the whole population}
 
 \item{seed}{a valid seed value for reproducibility}
 
-\item{asDataFrame}{logical, should output be in a data.frame form? if FALSE,
+\item{as_data_frame}{logical, should output be in a data.frame form? if FALSE,
 a matrix is returned}
 
-\item{writeOnFile}{logical, should output be written on a text file?}
+\item{write_on_file}{logical, should output be written on a text file?}
 
-\item{file_path}{path of the directory where the text file should be created,
-valid only if \code{writeOnFile} is TRUE}
+\item{file_path}{string indicating the path to the directory where the text
+file with the output should be created, used only if \code{write_on_file} is TRUE.
+It should never end with a trailing slash '/',}
 
-\item{by}{integer scalar indicating every how many replications a partial output
+\item{by}{optional; integer scalar indicating every how many replications a partial output
 should be saved}
-
-\item{spMat}{a matrix of spatial contiguity among areas, only used for
-FPDUST sampling}
-
-\item{beta}{beta parameter to be used in FPDUST sampling (\code{beta<1})}
 
 \item{design_pars}{only used when a function is passed to argument \code{design},
 list of parameters to pass to the sampling design function.}
 }
 \value{
-A matrix of estimated inclusion probabilities
+A matrix of estimated inclusion probabilities if \code{as_data_frame=FALSE},
+otherwise a data.frame with three columns: the first two indicate the id of
+the couple of units, while the third one contains the joint-inclusion probability
+values. Please, note that when \code{as_data_frame=TRUE}, first-order
+inclusion probabilities are not returned.
 }
 \description{
 Approximate first and second-order inclusion probabilities by means of
@@ -75,6 +74,15 @@ y <- abs( 2*x + 3.7*sqrt(x) * rnorm(N) )
 
 pik  <- n * x/sum(x)
 
-jipSim(x=pik, n = n, replications = 100, design = "brewer")
+### Approximate joint-inclusion probabilities
+pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "brewer")
+pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "tille")
+pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "maxEntropy")
+pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "randomSystematic")
+pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "systematic")
+pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "sampford")
+pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "poisson")
+
+
 
 }

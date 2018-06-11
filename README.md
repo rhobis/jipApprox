@@ -60,7 +60,13 @@ pikl <- jip_approx(pik, method='Brewer3')
 pikl <- jip_approx(pik, method='Brewer4')
 
 ### Approximate inclusion probabilities through Monte Carlo simulation ---
-
+pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "brewer")
+pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "tille")
+pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "poisson")
+pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "maxEntropy")
+pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "randomSystematic")
+pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "systematic")
+pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "sampford")
 
 ```
 

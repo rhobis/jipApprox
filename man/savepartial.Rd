@@ -4,16 +4,10 @@
 \alias{savepartial}
 \title{Save partial results}
 \usage{
-savepartial(iteration, replications, by, counts, units, file_path, asDataFrame)
+savepartial(iteration, design, counts, units, file_path, as_data_frame)
 }
 \arguments{
 \item{iteration}{integer indicating the iterations the simulation is at}
-
-\item{replications}{integer indicating the total number of replications
-for the simulation}
-
-\item{by}{integer indicating after how many iterations estimates should be
-written on a file, must be < \code{replications}}
 
 \item{counts}{matrix with number of occurrences of couple of units up to
 current replication}
@@ -22,7 +16,13 @@ current replication}
 
 \item{file_path}{path of the file to write}
 
-\item{asDataFrame}{logical, should output be in form of a data frame?}
+\item{as_data_frame}{logical, should output be in form of a data frame?}
+
+\item{replications}{integer indicating the total number of replications
+for the simulation}
+
+\item{by}{integer indicating after how many iterations estimates should be
+written on a file, must be < \code{replications}}
 }
 \description{
 Write joint inclusion probability estimates on a file every \code{by} replications
