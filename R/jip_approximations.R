@@ -129,7 +129,7 @@ jip_approx <- function( pik, method ){
         stop( "The 'pik' vector is too short!" )
     }else if( any(pik<0)  | any(pik>1) ){
         stop( "Some values of the 'pik' vector are outside the interval [0, 1]")
-    }else if( !isTRUE(all.equal(sum(pik), as.integer(sum(pik)) )) ){
+    }else if( !isTRUE(all.equal(sum(pik), round(sum(pik)) )) ){
         stop( "The sum of 'pik' values is not an integer!")
     }
 
