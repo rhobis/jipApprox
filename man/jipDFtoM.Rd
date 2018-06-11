@@ -4,7 +4,17 @@
 \alias{jipDFtoM}
 \title{Transform Joint-Inclusion Probability data.frame to matrix}
 \usage{
-jipDFtoM(pi_ij)
+jipDFtoM(jip, symmetric = TRUE)
+}
+\arguments{
+\item{jip}{vector or data.frame containing the joint-inclusion probabilities}
+
+\item{symmetric}{boolean, if \code{TRUE}, returns a symmetric matrix, otherwise,
+an upper triangular matrix}
+}
+\value{
+a symmetric matrix of joint-inclusion probabilities if \code{TRUE}, otherwise,
+an upper triangular matrix
 }
 \description{
 Transform Joint-Inclusion Probability data.frame to matrix

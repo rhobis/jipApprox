@@ -5,7 +5,8 @@
 \title{Approximate inclusion probabilities by Monte Carlo simulation}
 \usage{
 jip_MonteCarlo(x, n, replications = 1e+06, design, units, seed = NULL,
-  as_data_frame = FALSE, write_on_file = FALSE, file_path, by = NULL)
+  as_data_frame = FALSE, design_pars, write_on_file = FALSE, file_path,
+  by = NULL)
 }
 \arguments{
 \item{x}{size measure or first-order inclusion probabilities}
@@ -26,6 +27,9 @@ Optional, if missing, estimates are produced for the whole population}
 \item{as_data_frame}{logical, should output be in a data.frame form? if FALSE,
 a matrix is returned}
 
+\item{design_pars}{only used when a function is passed to argument \code{design},
+list of parameters to pass to the sampling design function.}
+
 \item{write_on_file}{logical, should output be written on a text file?}
 
 \item{file_path}{string indicating the path to the directory where the text
@@ -34,9 +38,6 @@ It should never end with a trailing slash '/',}
 
 \item{by}{optional; integer scalar indicating every how many replications a partial output
 should be saved}
-
-\item{design_pars}{only used when a function is passed to argument \code{design},
-list of parameters to pass to the sampling design function.}
 }
 \value{
 A matrix of estimated inclusion probabilities if \code{as_data_frame=FALSE},

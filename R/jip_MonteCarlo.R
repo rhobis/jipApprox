@@ -77,6 +77,7 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
                            units,
                            seed = NULL,
                            as_data_frame = FALSE,
+                           design_pars,
                            write_on_file = FALSE,
                            file_path,
                            by = NULL

@@ -12,6 +12,10 @@ sampford(pik, n, N, s, list)
 \item{n}{sample size}
 
 \item{N}{population size (excluding self-selecting units)}
+
+\item{s}{vector of length N, with 1s at the positions of self-selecting units}
+
+\item{list}{vector with positions of self selcting units}
 }
 \description{
 Draw a sample by means of Rao-Sampford sampling

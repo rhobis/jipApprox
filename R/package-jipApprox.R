@@ -34,4 +34,7 @@
 #' perspective for estimating inclusion probabilities.
 #' Biometrika 93 (2), 269–278
 #'
+#'
+#' @importFrom stats rmultinom runif
+#' @importFrom utils combn setTxtProgressBar txtProgressBar write.table
 NULL

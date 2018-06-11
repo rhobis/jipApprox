@@ -5,6 +5,8 @@
 #' @param pik vector of first-order inclusion probabilities
 #' @param n sample size
 #' @param N population size (excluding self-selecting units)
+#' @param s vector of length N, with 1s at the positions of self-selecting units
+#' @param list vector with positions of self selcting units
 #'
 #' @note this function is a modified version of function \code{\link[sampling]{UPsampford}},
 #' in the \pkg{sampling} package.

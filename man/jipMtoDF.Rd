@@ -2,10 +2,17 @@
 % Please edit documentation in R/utils.R
 \name{jipMtoDF}
 \alias{jipMtoDF}
-\title{Transform Joint-Inclusion Probability matrix to data.frame}
+\title{Transform matrix of Joint-Inclusion Probabilities to data.frame}
 \usage{
-jipMtoDF(jipmat, id = NULL)
+jipMtoDF(jip, id = NULL)
+}
+\arguments{
+\item{jip}{a square matrix of joint-inclusion probabilities, symmetric or
+upper-triangular}
+
+\item{id}{optional, vector of id labels, its length should be equal to
+\code{ncol(jip)} and \code{nrow(jip)}}
 }
 \description{
-Transform Joint-Inclusion Probability matrix to data.frame
+Transform matrix of Joint-Inclusion Probabilities to data.frame
 }

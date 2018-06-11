@@ -87,21 +87,25 @@ savepartial <- function(iteration,
 
 
 
-#' Transform Joint-Inclusion Probability matrix to data.frame
+#' Transform matrix of Joint-Inclusion Probabilities to data.frame
+#'
+#' @param jip a square matrix of joint-inclusion probabilities, symmetric or
+#' upper-triangular
+#' @param id optional, vector of id labels, its length should be equal to
+#' \code{ncol(jip)} and \code{nrow(jip)}
+#'
 
-jipMtoDF <- function(jipmat, id=NULL){
-    # Joint inclusion probabilities, from matrix to data frame
-    # mat = matrix with joint inclusion probabilities
-    # id  = optional, id labels
-    n <- nrow(jipmat)
+jipMtoDF <- function(jip, id=NULL){
+
+    n <- nrow(jip)
     jip_v <- vector()
     for(i in 2:n){
-        jip_v <- c(jip_v, jipmat[(i-1),i:n])
+        jip_v <- c(jip_v, jip[(i-1),i:n])
     }
     if(!missing(id)){
         couples <- combn(id,2)
-    }else if(missing(id) & !is.null(colnames(jipmat))){
-        id <- colnames(jipmat)
+    }else if(missing(id) & !is.null(colnames(jip))){
+        id <- colnames(jip)
         couples <- combn(id,2)
     }else couples <- combn(1:n,2)
 
@@ -111,36 +115,45 @@ jipMtoDF <- function(jipmat, id=NULL){
 
 #' Transform Joint-Inclusion Probability data.frame to matrix
 #'
+#' @param jip vector or data.frame containing the joint-inclusion probabilities
+#' @param symmetric boolean, if \code{TRUE}, returns a symmetric matrix, otherwise,
+#' an upper triangular matrix
+#'
+#' @return a symmetric matrix of joint-inclusion probabilities if \code{TRUE}, otherwise,
+#' an upper triangular matrix
 #'
 
-#returns an upper triangular matrix
-jipDFtoM <- function(pi_ij){
-    n <- (1 + sqrt( 1 + 8*length(pi_ij) ) ) / 2
+
+jipDFtoM <- function(jip, symmetric = TRUE){
+    n <- (1 + sqrt( 1 + 8*length(jip) ) ) / 2
     M <- matrix(0,n,n)
     r <- 1; i <- 1; j <- n-1
     while(r < n){
-        M[r,(r+1):n] <- pi_ij[i:j]
+        M[r,(r+1):n] <- jip[i:j]
         r <- r + 1
         i <- j + 1
         j <- j + (n-r)
     }
-    return(M)
-}
-
-#returns a symmetric matrix
-jipDFtoM2 <- function(pi_ij){
-    n <- (1 + sqrt( 1 + 8*length(pi_ij) ) ) / 2
-    M <- matrix(0,n,n)
-    r <- 1; i <- 1; j <- n-1
-    while(r < n){
-        M[r,(r+1):n] <- pi_ij[i:j]
-        r <- r + 1
-        i <- j + 1
-        j <- j + (n-r)
+    if( symmetric ){
+        lt <- lower.tri(M)
+        M[lt] <- t(M)[lt]
     }
-    lt <- lower.tri(M)
-    M[lt] <- t(M)[lt]
     return(M)
 }
 
 
+
+#' Check if a number is integer
+#'
+#' Check if \code{x} is an integer number, differently from \code{is.integer},
+#' which checks the type of the object \code{x}
+#'
+#' @param x a scalar or a numeric vector
+#' @param tol a scalar, indicating the tolerance
+#'
+#'
+#' @note From the help page of function \code{\link[base]{is.integer}}
+
+is.wholenumber <- function(x, tol = .Machine$double.eps^0.5){
+    abs(x - round(x)) < tol
+}
