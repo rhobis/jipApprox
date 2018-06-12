@@ -42,7 +42,7 @@ pre_tille <- function(pik){ #computations needed just one time
 #' for population units for one step of the procedure.
 #'
 #'
-#' @export
+#'
 
 tille <- function(pik, n, N, s, list, pmat){ #sample selection
     sb = rep(1, N)

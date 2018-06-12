@@ -39,7 +39,7 @@ pre_CPS <- function(pik){
 #' @note this functions is a modified version of function \code{\link[sampling]{UPmaxentropy}},
 #' in the \pkg{sampling} package.
 #'
-#' @export
+#'
 
 maxEntropy <- function(pik, N, q){
     #select samples

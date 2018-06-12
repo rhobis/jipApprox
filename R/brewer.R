@@ -10,7 +10,7 @@
 #' @note this function is a modified version of function \code{\link[sampling]{UPbrewer}},
 #' from the \pkg{sampling} package.
 #'
-#' @export
+
 
 brewer <- function(pik, n, N, s, list){
     sb <- rep(0, N)

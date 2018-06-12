@@ -11,7 +11,7 @@
 #' @note this function is a modified version of function \code{\link[sampling]{UPsampford}},
 #' in the \pkg{sampling} package.
 #'
-#' @export
+#'
 
 sampford <- function(pik, n, N, s, list){
 

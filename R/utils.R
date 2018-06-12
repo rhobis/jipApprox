@@ -94,6 +94,8 @@ savepartial <- function(iteration,
 #' @param id optional, vector of id labels, its length should be equal to
 #' \code{ncol(jip)} and \code{nrow(jip)}
 #'
+#'
+#' @export
 
 jipMtoDF <- function(jip, id=NULL){
 
@@ -122,6 +124,7 @@ jipMtoDF <- function(jip, id=NULL){
 #' @return a symmetric matrix of joint-inclusion probabilities if \code{TRUE}, otherwise,
 #' an upper triangular matrix
 #'
+#' @export
 
 
 jipDFtoM <- function(jip, symmetric = TRUE){
@@ -153,6 +156,8 @@ jipDFtoM <- function(jip, symmetric = TRUE){
 #'
 #'
 #' @note From the help page of function \code{\link[base]{is.integer}}
+#'
+#' @keywords internal
 
 is.wholenumber <- function(x, tol = .Machine$double.eps^0.5){
     abs(x - round(x)) < tol

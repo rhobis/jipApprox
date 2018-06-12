@@ -18,3 +18,4 @@ which checks the type of the object \code{x}
 \note{
 From the help page of function \code{\link[base]{is.integer}}
 }
+\keyword{internal}
