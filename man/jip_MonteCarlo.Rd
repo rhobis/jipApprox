@@ -9,7 +9,7 @@ jip_MonteCarlo(x, n, replications = 1e+06, design, units, seed = NULL,
   by = NULL)
 }
 \arguments{
-\item{x}{size measure or first-order inclusion probabilities}
+\item{x}{size measure or first-order inclusion probabilities, a vector or single-column data.frame}
 
 \item{n}{sample size (for fixed size samplings), or expected sample size (for Poisson sampling)}
 
@@ -84,6 +84,11 @@ pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "systematic")
 pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "sampford")
 pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "poisson")
 
-
+#Use an external function to draw samples
+pikl <- jip_MonteCarlo(x=pik, n=n, replications=100,
+                       design = sampling::UPmidzuno, design_pars = list(pik=pik))
+#Write output on file after 50 and 100 replications
+pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "brewer",
+                       write_on_file = TRUE, file_path=tempdir(), by = 50 )
 
 }
