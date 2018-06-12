@@ -39,31 +39,35 @@ excludeSSU <- function(pik, eps = 1e-06){
 #' Write joint inclusion probability estimates on a file every \code{by} replications
 #'
 #' @param iteration integer indicating the iterations the simulation is at
-#' @param replications integer indicating the total number of replications
-#' for the simulation
-#' @param by integer indicating after how many iterations estimates should be
-#' written on a file, must be < \code{replications}
+#' @param design_name string indicating the name of the sampling design to include
+#' in the filename
 #' @param counts matrix with number of occurrences of couple of units up to
 #' current replication
 #' @param units id of units for which output should be saved
-#' @param file_path path of the file to write
+#' @param filename name of the file to write on disk
+#' @param path path to the directory where the file should be saved
+#' @param status \code{1} if partial results are written before the maximum number
+#' of replications is reached, \code{0} otherwise
 #' @param as_data_frame logical, should output be in form of a data frame?
 #'
 #'
 #' @keywords internal
 
-savepartial <- function(iteration,
-                        design,
+save_output <- function(iteration,
+                        design_name,
                         counts,
                         units,
-                        file_path,
+                        filename,
+                        path,
+                        status,
                         as_data_frame){
 
+    if( !(status %in% c(0,1)) ) stop("status should be either 0 or 1")
     #get data ready
-    M <- ifelse( identical(design, "systematic"), iteration, iteration+1)
+    M <- ifelse( identical(design_name, "systematic"), iteration, iteration+1)
     jips <- counts/M
     colnames(jips) <- rownames(jips)  <- as.character(units)
-    if(as_data_frame) jips <- jipMtoDF(jips, id=units )
+    if(as_data_frame) jips <- jipMtoDF(jips, id=units)
 
     #number of iteration string to append to file name
     if( iteration<1e03){
@@ -80,9 +84,18 @@ savepartial <- function(iteration,
         niter <- sprintf("%s.%sM",substr(iteration,1,2), substr(iteration,3,3))
     }else niter <- sprintf("%i",iteration)
 
+    #define filename
+    if( is.null(filename) ){
+        filename <- paste0( file.path(path, design_name), '_', niter,'.txt')
+    }else{
+        if( as.logical(status) ){
+            filename <- paste0(path, '/', niter, '_', filename)
+        }else filename <- paste0( file.path(path, filename) )
+    }
+
     #write output on file
-    write.table(jips, file = paste0(file_path, '/', design, '_',niter,'.txt',sep=''))
-    Sys.sleep(.1)
+    write.table(jips, file = filename)
+
 }
 
 

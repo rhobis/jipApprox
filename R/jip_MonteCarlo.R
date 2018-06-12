@@ -20,9 +20,10 @@
 #' @param design_pars only used when a function is passed to argument \code{design},
 #'        list of parameters to pass to the sampling design function.
 #' @param write_on_file logical, should output be written on a text file?
-#' @param file_path string indicating the path to the directory where the text
-#' file with the output should be created, used only if \code{write_on_file} is TRUE.
-#' It should never end with a trailing slash '/',
+#' @param filename string indicating the name of the file to create on disk,
+#' must include the \code{.txt} extension; only applies if \code{write_on_file = TRUE}.
+#' @param path string indicating the path to the directory where the output file
+#' should be created; only applies if \code{write_on_file = TRUE}.
 #' @param by optional; integer scalar indicating every how many replications a partial output
 #' should be saved
 #'
@@ -37,6 +38,15 @@
 #' units and \code{FALSE} or \code{0} indicate non-sample units.
 #' The length of such vector must be equal to the length of \code{x}
 #' if \code{units} is not specified, otherwise it must have the same length of \code{units}.
+#'
+#'
+#' When \code{write_on_file = TRUE}, specifying a value for aurgument \code{by}
+#' will produce intermediate files with approximate inclusion probabilities every
+#' \code{by} number of replications. E.g., if \code{replications=1e06} and \code{by=5e05},
+#' two output files will be created: one with estimates at \code{5e05}
+#' and one at \code{1e06} replications.
+#' This option is particularly useful to assess convergence of the estimates.
+#'
 #'
 #'
 #' @return A matrix of estimated inclusion probabilities if \code{as_data_frame=FALSE},
@@ -70,7 +80,7 @@
 #'                        design = sampling::UPmidzuno, design_pars = list(pik=pik))
 #' #Write output on file after 50 and 100 replications
 #' pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "brewer",
-#'                        write_on_file = TRUE, file_path=tempdir(), by = 50 )
+#'                        write_on_file = TRUE, filename="test.txt", path=tempdir(), by = 50 )
 #'
 #' @export
 #'
@@ -84,7 +94,8 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
                            as_data_frame = FALSE,
                            design_pars,
                            write_on_file = FALSE,
-                           file_path,
+                           filename,
+                           path,
                            by = NULL
 ){
 
@@ -100,6 +111,7 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
                                       'systematic')
         )
     }
+
 
     ## x
     if( is.data.frame(x) ){
@@ -155,23 +167,33 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
         message("The number of Monte Carlo replications is too small, estimates may be unreliable!")
     }else replications <- ceiling(replications)
 
-    ## file_path
+    ## filename
     if( write_on_file ){
-        #file_path
-        if( missing(file_path) ) file_path <- getwd()
-        if( !is.character(file_path) ) stop("file_path should be a string!")
-        if( !dir.exists(file_path) ){
-            dc <- dir.create(file_path, showWarnings = TRUE, recursive = TRUE)
-            if( !dc ) stop("There is no folder at the path specified in file_path ",
+        #filename
+        if( missing(filename) ) filename <- NULL
+        if( !is.character(filename) ) stop("filename should be a string!")
+
+        if( missing(path) ) path <- getwd()
+        if( is.null(path) ) path <- getwd()
+        if( !is.character(path) ) stop("path should be a string!")
+
+        if( !dir.exists(path) ){
+            dc <- dir.create(path, showWarnings = TRUE, recursive = TRUE)
+            if( !dc ) stop("There is no folder corresponding to the specified path ",
                            "and the creation of a new directory failed, please provide a path to an existing directory!")
         }
+
         #by
         if( is.null(by) ) by <- replications
         if( !is.numeric(by) ) stop("Argument 'by' should be a positive integer scalar")
         if( by > replications) by <- replications
 
-        # print path
-        message("Output will be written in the directory: ", file_path, "/")
+        #tell function save_output if only one file must be created
+        status <- ifelse( isTRUE( all.equal(by, replications) ), 0L, 1L)
+
+
+        # print path on screen
+        message("Output will be written in the directory: ", path, "/")
 
     }
 
@@ -219,20 +241,37 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
     }else if( is.function(design) ){
         smplFUN <- design
         pars    <- design_pars
+        design  <- "myFUN"
     }else stop("Argument design is not well-specified: it should be either a string representing ",
                "one of the available sampling designs or an object of class function!")
 
     ### Monte Carlo simulation ----
     set.seed(seed)
-    for(r in 1:replications){
-        setTxtProgressBar(pb, r)
+    if( write_on_file ){
+        for(r in 1:replications){
+            setTxtProgressBar(pb, r)
 
-        s <- do.call(smplFUN,pars) ### vector of 0 and 1
-        counts <- counts + outer(s[units],s[units], "*")
-        if(write_on_file){
-            if(r %% by == 0){
-                savepartial(r, design, counts, units, file_path, as_data_frame)
+            s <- do.call(smplFUN,pars) ### vector of 0 and 1
+            counts <- counts + outer(s[units],s[units], "*")
+            if( (r %% by) == 0){
+                save_output(iteration   = r,
+                            design_name = design,
+                            counts      = counts,
+                            units       = units,
+                            filename    = filename,
+                            path        = path,
+                            status      = status,
+                            as_data_frame = as_data_frame)
+
             }
+        }
+    }else{
+
+        for(r in 1:replications){
+            setTxtProgressBar(pb, r)
+
+            s <- do.call(smplFUN,pars) ### vector of 0 and 1
+            counts <- counts + outer(s[units],s[units], "*")
         }
     }
     close(pb)

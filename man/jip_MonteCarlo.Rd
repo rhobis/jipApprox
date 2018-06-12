@@ -5,7 +5,7 @@
 \title{Approximate inclusion probabilities by Monte Carlo simulation}
 \usage{
 jip_MonteCarlo(x, n, replications = 1e+06, design, units, seed = NULL,
-  as_data_frame = FALSE, design_pars, write_on_file = FALSE, file_path,
+  as_data_frame = FALSE, design_pars, write_on_file = FALSE, filename, path,
   by = NULL)
 }
 \arguments{
@@ -32,9 +32,11 @@ list of parameters to pass to the sampling design function.}
 
 \item{write_on_file}{logical, should output be written on a text file?}
 
-\item{file_path}{string indicating the path to the directory where the text
-file with the output should be created, used only if \code{write_on_file} is TRUE.
-It should never end with a trailing slash '/',}
+\item{filename}{string indicating the name of the file to create on disk,
+must include the \code{.txt} extension; only applies if \code{write_on_file = TRUE}.}
+
+\item{path}{string indicating the path to the directory where the output file
+should be created; only applies if \code{write_on_file = TRUE}.}
 
 \item{by}{optional; integer scalar indicating every how many replications a partial output
 should be saved}
@@ -64,6 +66,14 @@ vector or a vector of 0 and 1,  where \code{TRUE} or \code{1} indicate sampled
 units and \code{FALSE} or \code{0} indicate non-sample units.
 The length of such vector must be equal to the length of \code{x}
 if \code{units} is not specified, otherwise it must have the same length of \code{units}.
+
+
+When \code{write_on_file = TRUE}, specifying a value for aurgument \code{by}
+will produce intermediate files with approximate inclusion probabilities every
+\code{by} number of replications. E.g., if \code{replications=1e06} and \code{by=5e05},
+two output files will be created: one with estimates at \code{5e05}
+and one at \code{1e06} replications.
+This option is particularly useful to assess convergence of the estimates.
 }
 \examples{
 ### Generate population data ---
@@ -89,6 +99,6 @@ pikl <- jip_MonteCarlo(x=pik, n=n, replications=100,
                        design = sampling::UPmidzuno, design_pars = list(pik=pik))
 #Write output on file after 50 and 100 replications
 pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "brewer",
-                       write_on_file = TRUE, file_path=tempdir(), by = 50 )
+                       write_on_file = TRUE, filename="test.txt", path=tempdir(), by = 50 )
 
 }
