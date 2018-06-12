@@ -6,7 +6,7 @@
 #' couple of units over the total number of replications. One unit is added to both
 #' numerator and  denominator to assure strict positivity of estimates (Fattorini, 2006).
 #'
-#' @param x size measure or first-order inclusion probabilities
+#' @param x size measure or first-order inclusion probabilities, a vector or single-column data.frame
 #' @param n sample size (for fixed size samplings), or expected sample size (for Poisson sampling)
 #' @param replications number of independent Monte Carlo replications
 #' @param design sampling procedure to be used for sample selection.
@@ -65,7 +65,12 @@
 #' pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "sampford")
 #' pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "poisson")
 #'
-#'
+#' #Use an external function to draw samples
+#' pikl <- jip_MonteCarlo(x=pik, n=n, replications=100,
+#'                        design = sampling::UPmidzuno, design_pars = list(pik=pik))
+#' #Write output on file after 50 and 100 replications
+#' pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "brewer",
+#'                        write_on_file = TRUE, file_path=tempdir(), by = 50 )
 #'
 #' @export
 #'
@@ -85,66 +90,77 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
 
     ### Check input ------------------------------------------------------------
 
-    design <- match.arg(design, c('brewer',
-                                  'tille',
-                                  'maxEntropy',
-                                  'randomSystematic',
-                                  'sampford',
-                                  'poisson',
-                                  'systematic')
-    )
+    if( !is.function(design) ){
+        design <- match.arg(design, c('brewer',
+                                      'tille',
+                                      'maxEntropy',
+                                      'randomSystematic',
+                                      'sampford',
+                                      'poisson',
+                                      'systematic')
+        )
+    }
 
     ## x
-    if (is.data.frame(x))
-        if (ncol(x) > 1)
+    if( is.data.frame(x) ){
+        if( ncol(x) > 1 ){
+            stop("Argument x is not a vector!")
+        }else x = unlist(x)
+    }else if( is.matrix(x) ){
+        if( ncol(x) > 1 ){
+            stop("Argument x is not a vector!")
+        }else x = x[, 1]
+    }else if( is.list(x) ){
+        if (length(x) > 1){
             stop("Argument x is not a vector")
-    else X = unlist(x)
-    else if (is.matrix(x))
-        if (ncol(x) > 1)
-            stop("Argument x is not a vector")
-    else X = X[, 1]
-    else if (is.list(x))
-        if (length(x) > 1)
-            stop("Argument x is not a vector")
-    else X = unlist(x)
+        }
+    }else x = unlist(x)
 
-    if (any(is.na(x))){
+    if( any(is.na(x) | is.nan(x)) ){
         stop("Argument x has some missing values")
     }
+
     ## units
-    if(missing(units)){
+    if( missing(units) ){
         units <- seq_along(x)
     }else if( is.null(units) ){
         units <- seq_along(x)
-    }else if(length(units) < 2){
+    }else if( length(units) < 2 ){
         stop("Not a valid units vector, it should include at least two unit ids")
-    } else if(!is.numeric(units)){
+    }else if( !is.numeric(units) ){
         stop("units is not a numeric vector")
+    }else if( any( units>length(x) ) ){
+        units <- units[ units<=length(x) ]
+        message("The vector units contains values that do not point to any value of x, ",
+                "dropping the values:",
+                if( length( du <- units[ units>length(x) ] ) < 26 ) du else du[1:25]
+        )
     }
+
     ##n
-    if(!is.numeric(n)){
+    if( !is.numeric(n) ){
         stop("n must be a numeric value")
-    }else n <- sampling::.as_int(ceiling(n))
+    }else n <- ceiling(n)
 
 
     # seed, check if it's numeric
-    if( !missing(seed) && !is.numeric(seed)){
-        stop("Please, provide a numeric seed")
+    if( !is.null(seed) & (!is.numeric(seed) | length(seed)>1) ){
+        stop("The seed provided is not valid. Please, provide a numeric seed")
     }
+
     ## replications
-    if(!is.numeric(replications) || replications < 2){
-        stop("Not a valid replications number, it should be a number greater than 1")
-    } else if(replications < 1000)
+    if( !is.numeric(replications) |  replications < 2 | length(replications)>1 ){
+        stop("Not a valid replications number, it should be a scalar greater than 1")
+    } else if(replications < 1000){
         message("The number of Monte Carlo replications is too small, estimates may be unreliable!")
-
-
+    }else replications <- ceiling(replications)
 
     ## file_path
     if( write_on_file ){
         #file_path
         if( missing(file_path) ) file_path <- getwd()
         if( !is.character(file_path) ) stop("file_path should be a string!")
-        if(!dir.exists(file_path)){
+        if( !dir.exists(file_path) ){
             dc <- dir.create(file_path, showWarnings = TRUE, recursive = TRUE)
             if( !dc ) stop("There is no folder at the path specified in file_path ",
                            "and the creation of a new directory failed, please provide a path to an existing directory!")
@@ -155,7 +171,7 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
         if( by > replications) by <- replications
 
         # print path
-        message("Output will be written in the directory: ", file_path)
+        message("Output will be written in the directory: ", file_path, "/")
 
     }
 
@@ -201,8 +217,8 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
                           'systematic' = sampling::UPsystematic
         )
     }else if( is.function(design) ){
-        pars    <- design_pars
         smplFUN <- design
+        pars    <- design_pars
     }else stop("Argument design is not well-specified: it should be either a string representing ",
                "one of the available sampling designs or an object of class function!")
 
