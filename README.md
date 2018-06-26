@@ -1,7 +1,7 @@
 jipApprox
 ======================================================
 
-
+[![Travis-CI Build Status](https://travis-ci.org/rhobis/jipApprox.svg?branch=master)](https://travis-ci.org/rhobis/jipApprox)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/UPSvarApprox)](https://cran.r-project.org/package=jipApprox)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/jipApprox)](https://cran.r-project.org/package=jipApprox)
 
