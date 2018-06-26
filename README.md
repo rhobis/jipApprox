@@ -7,7 +7,7 @@ jipApprox
 
 Description 
 -----------------
-This package to approximate joint-inclusion probabilities in Unequal Probability
+This package provides functions to approximate joint-inclusion probabilities in Unequal Probability
 Sampling, or to find Monte Carlo approximations of first and second-order inclusion
 probabilities of a general sampling design.
 
