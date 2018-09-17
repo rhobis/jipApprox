@@ -3,7 +3,7 @@
 #' Approximations of joint-inclusion probabilities by means of first-order
 #' inclusion probabilities.
 #'
-#' @param pik numeric, vector of first-order inclusion probabilities for all
+#' @param pik numeric vector of first-order inclusion probabilities for all
 #' population units.
 #' @param method string representing one of the available approximation methods.
 #'
@@ -11,36 +11,40 @@
 #' @details
 #' Available methods are \code{"Hajek"}, \code{"HartleyRao"}, \code{"Tille"},
 #' \code{"Brewer1"},\code{"Brewer2"},\code{"Brewer3"}, and \code{"Brewer4"}.
-#' Note that these methods were derived for high-entropy sampling designs.
+#' Note that these methods were derived for high-entropy sampling designs,
+#' therefore they could have low performance under different designs.
 #'
-#' Hájek (1964) approximation is derived under Maximum Entropy sampling design
+#' Hájek (1964) approximation [\code{method="Hajek"}] is derived under Maximum Entropy sampling design
 #' and is given by
 #'
-#' \deqn{\tilde{\pi}_{ij} = \pi_i\pi_j \frac{\bigl( 1 - (1-\pi_i)(1-\pi_j)}{d} \bigr)}{
-#'       \pi(ij) = \pi(i) \pi(j) (1 - ( 1-\pi(i) )( 1 -\pi(j) ) )/d}
+#' \deqn{\tilde{\pi}_{ij} = \pi_i\pi_j \frac{1 - (1-\pi_i)(1-\pi_j)}{d} }{
+#'       \pi(ij) = \pi(i) \pi(j) (1 - ( 1-\pi(i) )( 1 -\pi(j) ) ) /d}
 #'  where \eqn{d = \sum_{i\in U} \pi_i(1-\pi_i) }{d = \sum \pi(i)(1-\pi(i))}
 #'
 #' Hartley and Rao (1962) proposed the following approximation under
-#' randomised systematic sampling:
+#' randomised systematic sampling [\code{method="HartleyRao"}]:
 #'
 #' \deqn{\tilde{\pi}_{ij} = \frac{n-1}{n} \pi_i\pi_j + \frac{n-1}{n^2} (\pi_i^2 \pi_j + \pi_i \pi_j^2)
-#'       - \frac{n-1}{n^3}\pi_i\pi_j \sum_{i\in U} \pi_j^2 + \frac{2(n-1)}{n^3} (\pi_i^3 \pi_j + \pi_i\pi_j^3 + \pi_i^2 \pi_j^2)
-#'       - \frac{3(n-1)}{n^4} (\pi_i^2 \pi_j + \pi_i\pi_j^2) \sum_{i \in U}\pi_i^2
-#'       + \frac{3(n-1)}{n^5} \pi_i\pi_j \biggl( \sum_{i\in U} \pi_i^2 \biggr)^2
-#'       - frac{2(n-1)}{n^4} \pi_i\pi_j \sum{i \in U} \pi_j^3  }{*see pdf version of documentation*}
+#'       - \frac{n-1}{n^3}\pi_i\pi_j \sum_{i\in U} \pi_j^2}{}
+#'
+#' \deqn{ + \frac{2(n-1)}{n^3} (\pi_i^3 \pi_j + \pi_i\pi_j^3 + \pi_i^2 \pi_j^2)
+#'       - \frac{3(n-1)}{n^4} (\pi_i^2 \pi_j + \pi_i\pi_j^2) \sum_{i \in U}\pi_i^2}{}
+#'
+#' \deqn{+ \frac{3(n-1)}{n^5} \pi_i\pi_j \biggl( \sum_{i\in U} \pi_i^2 \biggr)^2
+#'       - \frac{2(n-1)}{n^4} \pi_i\pi_j \sum_{i \in U} \pi_j^3  }{*see pdf version of documentation*}
 #'
 #' Tillé (1996) proposed the approximation \eqn{\tilde{\pi}_{ij} = \beta_i\beta_j}{\pi(ij) = \beta_i \beta_j},
 #' where the coefficients \eqn{\beta_i}{\beta} are computed iteratively through the
-#'    following procedure:
+#'    following procedure [\code{method="Tille"}]:
 #'     \enumerate{
 #'         \item \eqn{\beta_i^{(0)} = \pi_i, \,\, \forall i\in U}{\beta(0) = \pi, i = 1, ..., N}
 #'         \item \eqn{ \beta_i^{(2k-1)} = \frac{(n-1)\pi_i}{\beta^{(2k-2)} - \beta_i^{(2k-2)}}  }{
 #'                     \beta(2k-1) = ( (n-1)\pi )/(\sum\beta(2k-2) - \beta(2k-2)) }
 #'         \item \eqn{\beta_i^{2k} = \beta_i^{(2k-1)}
 #'         \Biggl( \frac{n(n-1)}{(\beta^(2k-1))^2 - \sum_{i\in U} (\beta_k^{(2k-1)})^2 } \Biggr)^(1/2) }{
-#'         \beta(2k) = \beta(2k-1) ( n(n-1) / ( (\sum\beta(2k-1))^2 - \sum( \beta(2k-1)^2 ) ) )^(1/2) }
+#'         \beta(2k) = \beta(2k-1) ( n(n-1) / ( (\sum\beta(2k-1))^2 - \sum( \beta(2k-1)^2 ) ) )^{(1/2)} }
 #'     }
-#'     \eqn{  \text{with} \beta^{(k)} = \sum_{i\in U} \beta_i^{i}, \,\, k=1,2,3, \dots }{}
+#'     with \eqn{\beta^{(k)} = \sum_{i\in U} \beta_i^{i}, \,\, k=1,2,3, \dots }{}
 #'
 #' Finally, Brewer (2002) and Brewer and Donadio (2003) proposed four approximations,
 #' which are defined by the general form
@@ -50,14 +54,14 @@
 #' where the \eqn{c_i} determine the approximation used:
 #'
 #' \itemize{
-#'     \item Equation (9), \code{method="Brewer1"}:
+#'     \item Equation (9)  [\code{method="Brewer1"}]:
 #'         \deqn{c_i = (n-1) / (n-\pi_i)}{c(i) = [n-1] / [n-\pi(i) ]}
-#'    \item Equation (10), \code{method="Brewer2"}:
-#'         \deqn{c_i = (n-1) / (n- n^{-1}\sum_{i\in U}\pi_i^2)}{c(i) = [n-1] / [n- \sum_U \pi(i)^2 / n ]}
-#'     \item Equation (11), \code{method="Brewer3"}:
-#'         \deqn{c_i = (n-1) / (n - 2\pi_i + n^{-1}\sum_{i\in U}\pi_i^2)}{c(i) = [n-1] / [n- 2\pi(i) + \sum_U \pi(i)^2 / n ]}
-#'     \item Equation (18), \code{method="Brewer4"}:
-#'         \deqn{c_i = (n-1) / (n - (2n-1)(n-1)^{-1}\pi_i + (n-1)^{-1}\sum_{i\in U}\pi_i^2)}{
+#'    \item Equation (10) [\code{method="Brewer2"}]:
+#'         \deqn{c_i = (n-1) / \Bigl(n- n^{-1}\sum_{i\in U}\pi_i^2 \Bigr)}{c(i) = [n-1] / [n- \sum_U \pi(i)^2 / n ]}
+#'     \item Equation (11) [\code{method="Brewer3"}]:
+#'         \deqn{c_i = (n-1) / \Bigl(n - 2\pi_i + n^{-1}\sum_{i\in U}\pi_i^2 \Bigr)}{c(i) = [n-1] / [n- 2\pi(i) + \sum_U \pi(i)^2 / n ]}
+#'     \item Equation (18) [\code{method="Brewer4"}]:
+#'         \deqn{c_i = (n-1) / \Bigl(n - (2n-1)(n-1)^{-1}\pi_i + (n-1)^{-1}\sum_{i\in U}\pi_i^2 \Bigr)}{
 #'         c(i) = [n-1] / [n- \pi(i)(2n -1)/(n-1) + \sum_U \pi(i)^2 / (n-1) ]}
 #'
 #' }
@@ -160,6 +164,7 @@ jip_approx <- function( pik, method ){
 #' @details
 #' \code{"Brewer18"} is the approximation showed in equation (18) of Brewer and Donadio (2003)
 #'
+#' @keywords internal
 
 jip_Brewer <- function(pik, method){
 
@@ -209,7 +214,7 @@ jip_Brewer <- function(pik, method){
 #'
 #' @inheritParams jip_approx
 #'
-#'
+#' @keywords internal
 
 jip_Hajek <- function(pik){
 
@@ -233,6 +238,7 @@ jip_Hajek <- function(pik){
 #'
 #' @inheritParams jip_approx
 #'
+#' @keywords internal
 
 jip_HartleyRao <- function(pik){
 
@@ -272,6 +278,7 @@ jip_HartleyRao <- function(pik){
 #' @param eps tolerance value for the convergence of the fixed-point procedure
 #' @inheritParams jip_approx
 #'
+#' @keywords internal
 
 jip_Tille <- function(pik,eps=1e-06, maxIter=1000){
 

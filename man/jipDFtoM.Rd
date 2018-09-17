@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{jipDFtoM}
 \alias{jipDFtoM}
-\title{Transform Joint-Inclusion Probability data.frame to matrix}
+\title{Transform a Joint-Inclusion Probability data.frame to a matrix}
 \usage{
 jipDFtoM(jip, symmetric = TRUE)
 }
@@ -17,5 +17,5 @@ a symmetric matrix of joint-inclusion probabilities if \code{TRUE}, otherwise,
 an upper triangular matrix
 }
 \description{
-Transform Joint-Inclusion Probability data.frame to matrix
+Transform a Joint-Inclusion Probability data.frame to a matrix
 }

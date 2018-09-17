@@ -7,9 +7,10 @@
 jip_Hajek(pik)
 }
 \arguments{
-\item{pik}{numeric, vector of first-order inclusion probabilities for all
+\item{pik}{numeric vector of first-order inclusion probabilities for all
 population units.}
 }
 \description{
 Estimate joint-inclusion probabilities using Hájek (1964) equation
 }
+\keyword{internal}

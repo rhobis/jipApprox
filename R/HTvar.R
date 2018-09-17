@@ -3,11 +3,11 @@
 #' Compute or estimate the variance of the Horvitz-Thompson total estimator
 #' by the Horvitz-Thompson or Sen-Yates-Grundy variance estimators.
 #'
-#' @param y numeric vector representing the variable object of inference
+#' @param y numeric vector representing the variable of interest
 #' @param pikl matrix of second-order (joint) inclusion probabilities; the diagonal
 #' must contain the first-order inclusion probabilities.
-#' @param sample boolean indicating if sample values are provided.
-#' If \code{sample=TRUE}, the function returnss a sample estimate of the variance,
+#' @param sample logical value indicating whether sample or population values are provided.
+#' If \code{sample=TRUE}, the function returns a sample estimate of the variance,
 #' while if \code{sample=FALSE}, the Variance is computed over all population units.
 #' Default is TRUE.
 #' @param method string, indicating if the Horvitz-Thompson (\code{"HT"}) or the
@@ -30,12 +30,12 @@
 #' by conditioning on the sample size n, and is therefore only appliable to
 #' fixed size sampling designs:
 #'
-#' \deqn{\sum_{i\in U}\sum_{j > i} (\pi_i\pi_j - \pi_{ij}) \Bigl(\frac{y_i}{\pi_i} - \frac{y_j}{\pi_j} \Bigr)^2 }{
+#' \deqn{\sum_{i\in U}\sum_{j > i} (\pi_i\pi_j - \pi_{ij}) \Biggl(\frac{y_i}{\pi_i} - \frac{y_j}{\pi_j} \Biggr)^2 }{
 #' \sum__U\sum_{j > i} [ \pi(i)\pi(j) - \pi(ij) ] [ y(i)/\pi(i) - y(j)/\pi(j) ]^2 }
 #'
 #' Its estimator is
 #'
-#' \deqn{\sum_{i\in U}\sum_{j > i} \frac{(\pi_i\pi_j - \pi_{ij})}{\pi_{ij}} \Bigl(\frac{y_i}{\pi_i} - \frac{y_j}{\pi_j} \Bigr)^2 }{
+#' \deqn{\sum_{i\in U}\sum_{j > i} \frac{(\pi_i\pi_j - \pi_{ij})}{\pi_{ij}} \Biggl(\frac{y_i}{\pi_i} - \frac{y_j}{\pi_j} \Biggr)^2 }{
 #' \sum__U\sum_{j > i} [ \pi(i)\pi(j) - \pi(ij) ] [ y(i)/\pi(i) - y(j)/\pi(j) ]^2 / \pi(ij) }
 #'
 #'

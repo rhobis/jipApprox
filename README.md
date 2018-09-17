@@ -27,7 +27,7 @@ computed using true inclusion probabilities or an approximation obtained by
 Installation
 ------------
 
-Currently, the package can be installed only from GitHub:
+The development version of the package can be installed from GitHub:
 
 ``` r
 # if not present, install 'devtools' package

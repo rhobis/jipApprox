@@ -1,5 +1,67 @@
 ### Helper functions -----------------------------------------------------------
 
+
+
+#' Transform a matrix of Joint-Inclusion Probabilities to a data.frame
+#'
+#' @param jip a square matrix of joint-inclusion probabilities, symmetric or
+#' upper-triangular
+#' @param id optional, vector of id labels, its length should be equal to
+#' \code{ncol(jip)} and \code{nrow(jip)}
+#'
+#'
+#' @export
+
+jipMtoDF <- function(jip, id=NULL){
+
+    n <- nrow(jip)
+    jip_v <- vector()
+    for(i in 2:n){
+        jip_v <- c(jip_v, jip[(i-1),i:n])
+    }
+    if(!missing(id)){
+        couples <- combn(id,2)
+    }else if(missing(id) & !is.null(colnames(jip))){
+        id <- colnames(jip)
+        couples <- combn(id,2)
+    }else couples <- combn(1:n,2)
+
+    return(data.frame(pi=couples[1,],pj=couples[2,], pij=jip_v))
+}
+
+
+#' Transform a Joint-Inclusion Probability data.frame to a matrix
+#'
+#' @param jip vector or data.frame containing the joint-inclusion probabilities
+#' @param symmetric boolean, if \code{TRUE}, returns a symmetric matrix, otherwise,
+#' an upper triangular matrix
+#'
+#' @return a symmetric matrix of joint-inclusion probabilities if \code{TRUE}, otherwise,
+#' an upper triangular matrix
+#'
+#' @export
+
+
+jipDFtoM <- function(jip, symmetric = TRUE){
+    n <- (1 + sqrt( 1 + 8*length(jip) ) ) / 2
+    M <- matrix(0,n,n)
+    r <- 1; i <- 1; j <- n-1
+    while(r < n){
+        M[r,(r+1):n] <- jip[i:j]
+        r <- r + 1
+        i <- j + 1
+        j <- j + (n-r)
+    }
+    if( symmetric ){
+        lt <- lower.tri(M)
+        M[lt] <- t(M)[lt]
+    }
+    return(M)
+}
+
+
+
+
 #' Exclude self-selecting units
 #'
 #' Exclude self-selecting units and units with probability zero and returns a list
@@ -96,65 +158,6 @@ save_output <- function(iteration,
     #write output on file
     write.table(jips, file = filename)
 
-}
-
-
-
-#' Transform matrix of Joint-Inclusion Probabilities to data.frame
-#'
-#' @param jip a square matrix of joint-inclusion probabilities, symmetric or
-#' upper-triangular
-#' @param id optional, vector of id labels, its length should be equal to
-#' \code{ncol(jip)} and \code{nrow(jip)}
-#'
-#'
-#' @export
-
-jipMtoDF <- function(jip, id=NULL){
-
-    n <- nrow(jip)
-    jip_v <- vector()
-    for(i in 2:n){
-        jip_v <- c(jip_v, jip[(i-1),i:n])
-    }
-    if(!missing(id)){
-        couples <- combn(id,2)
-    }else if(missing(id) & !is.null(colnames(jip))){
-        id <- colnames(jip)
-        couples <- combn(id,2)
-    }else couples <- combn(1:n,2)
-
-    return(data.frame(pi=couples[1,],pj=couples[2,], pij=jip_v))
-}
-
-
-#' Transform Joint-Inclusion Probability data.frame to matrix
-#'
-#' @param jip vector or data.frame containing the joint-inclusion probabilities
-#' @param symmetric boolean, if \code{TRUE}, returns a symmetric matrix, otherwise,
-#' an upper triangular matrix
-#'
-#' @return a symmetric matrix of joint-inclusion probabilities if \code{TRUE}, otherwise,
-#' an upper triangular matrix
-#'
-#' @export
-
-
-jipDFtoM <- function(jip, symmetric = TRUE){
-    n <- (1 + sqrt( 1 + 8*length(jip) ) ) / 2
-    M <- matrix(0,n,n)
-    r <- 1; i <- 1; j <- n-1
-    while(r < n){
-        M[r,(r+1):n] <- jip[i:j]
-        r <- r + 1
-        i <- j + 1
-        j <- j + (n-r)
-    }
-    if( symmetric ){
-        lt <- lower.tri(M)
-        M[lt] <- t(M)[lt]
-    }
-    return(M)
 }
 
 

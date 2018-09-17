@@ -12,6 +12,7 @@
 #' in the \pkg{sampling} package.
 #'
 #'
+#' @keywords internal
 
 sampford <- function(pik, n, N, s, list){
 

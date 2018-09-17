@@ -23,3 +23,4 @@ for population units for one step of the procedure.}
 \description{
 Draw a sample by means of Tillé's elimination procedure
 }
+\keyword{internal}

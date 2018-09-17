@@ -7,7 +7,7 @@
 jip_Brewer(pik, method)
 }
 \arguments{
-\item{pik}{numeric, vector of first-order inclusion probabilities for all
+\item{pik}{numeric vector of first-order inclusion probabilities for all
 population units.}
 
 \item{method}{string representing one of the available approximation methods.}
@@ -19,3 +19,4 @@ proposed by Brewer and Donadio (2003)
 \details{
 \code{"Brewer18"} is the approximation showed in equation (18) of Brewer and Donadio (2003)
 }
+\keyword{internal}

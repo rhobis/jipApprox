@@ -16,3 +16,4 @@ Compute matrix of selection probabilities for Conditional Poisson Sampling
 this functions is a modified version of function \code{\link[sampling]{UPmaxentropy}},
 in the \pkg{sampling} package.
 }
+\keyword{internal}

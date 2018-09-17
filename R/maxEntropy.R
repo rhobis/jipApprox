@@ -10,6 +10,7 @@
 #' @note this functions is a modified version of function \code{\link[sampling]{UPmaxentropy}},
 #' in the \pkg{sampling} package.
 #'
+#' @keywords internal
 
 
 pre_CPS <- function(pik){
@@ -39,7 +40,7 @@ pre_CPS <- function(pik){
 #' @note this functions is a modified version of function \code{\link[sampling]{UPmaxentropy}},
 #' in the \pkg{sampling} package.
 #'
-#'
+#' @keywords internal
 
 maxEntropy <- function(pik, N, q){
     #select samples

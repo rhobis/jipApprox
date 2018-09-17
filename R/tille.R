@@ -5,6 +5,8 @@
 #'
 #'
 #' @param pik vector of first-order inclusion probabilities
+#'
+#' @keywords internal
 
 pre_tille <- function(pik){ #computations needed just one time
     out <- excludeSSU(pik)
@@ -42,7 +44,7 @@ pre_tille <- function(pik){ #computations needed just one time
 #' for population units for one step of the procedure.
 #'
 #'
-#'
+#' @keywords internal
 
 tille <- function(pik, n, N, s, list, pmat){ #sample selection
     sb = rep(1, N)

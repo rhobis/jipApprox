@@ -5,21 +5,21 @@
 \title{Approximate inclusion probabilities by Monte Carlo simulation}
 \usage{
 jip_MonteCarlo(x, n, replications = 1e+06, design, units, seed = NULL,
-  as_data_frame = FALSE, design_pars, write_on_file = FALSE, filename, path,
-  by = NULL)
+  as_data_frame = FALSE, design_pars, write_on_file = FALSE, filename,
+  path, by = NULL)
 }
 \arguments{
 \item{x}{size measure or first-order inclusion probabilities, a vector or single-column data.frame}
 
-\item{n}{sample size (for fixed size samplings), or expected sample size (for Poisson sampling)}
+\item{n}{sample size (for fixed-size designs), or expected sample size (for Poisson sampling)}
 
-\item{replications}{number of independent Monte Carlo replications}
+\item{replications}{numeric value, number of independent Monte Carlo replications}
 
 \item{design}{sampling procedure to be used for sample selection.
 Either a string indicating the name of the sampling design or a function;
 see section "Details" for more information.}
 
-\item{units}{id of units for which probabilities have to be estimated.
+\item{units}{indices of units for which probabilities have to be estimated.
 Optional, if missing, estimates are produced for the whole population}
 
 \item{seed}{a valid seed value for reproducibility}
@@ -28,7 +28,7 @@ Optional, if missing, estimates are produced for the whole population}
 a matrix is returned}
 
 \item{design_pars}{only used when a function is passed to argument \code{design},
-list of parameters to pass to the sampling design function.}
+named list of parameters to pass to the sampling design function.}
 
 \item{write_on_file}{logical, should output be written on a text file?}
 
@@ -43,7 +43,7 @@ should be saved}
 }
 \value{
 A matrix of estimated inclusion probabilities if \code{as_data_frame=FALSE},
-otherwise a data.frame with three columns: the first two indicate the id of
+otherwise a data.frame with three columns: the first two indicate the ids of the
 the couple of units, while the third one contains the joint-inclusion probability
 values. Please, note that when \code{as_data_frame=TRUE}, first-order
 inclusion probabilities are not returned.
@@ -59,14 +59,13 @@ numerator and  denominator to assure strict positivity of estimates (Fattorini, 
 Argument \code{design} accepts either a string indicating the sampling design
 to use to draw samples or a function.
 Accepted designs are "brewer", "tille", "maxEntropy", "poisson",
-"sampford", "systematic", "randomSystematic", "srs", chao", "sunter", "srs", "fpdust", "fpdust_pps".
+"sampford", "systematic", "randomSystematic".
 The user may also pass a function as argument; such function should take as input
 the parameters passed to argument \code{design_pars} and return either a logical
-vector or a vector of 0 and 1,  where \code{TRUE} or \code{1} indicate sampled
+vector or a vector of 0s and 1s,  where \code{TRUE} or \code{1} indicate sampled
 units and \code{FALSE} or \code{0} indicate non-sample units.
 The length of such vector must be equal to the length of \code{x}
 if \code{units} is not specified, otherwise it must have the same length of \code{units}.
-
 
 When \code{write_on_file = TRUE}, specifying a value for aurgument \code{by}
 will produce intermediate files with approximate inclusion probabilities every
@@ -101,4 +100,10 @@ pikl <- jip_MonteCarlo(x=pik, n=n, replications=100,
 pikl <- jip_MonteCarlo(x=pik, n = n, replications = 100, design = "brewer",
                        write_on_file = TRUE, filename="test.txt", path=tempdir(), by = 50 )
 
+}
+\references{
+Fattorini, L. 2006.
+Applying the Horvitz-Thompson criterion in complex designs: A computer-intensive
+perspective for estimating inclusion probabilities.
+Biometrika 93 (2), 269–278
 }

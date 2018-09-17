@@ -7,13 +7,13 @@
 HTvar(y, pikl, sample = TRUE, method = "HT")
 }
 \arguments{
-\item{y}{numeric vector representing the variable object of inference}
+\item{y}{numeric vector representing the variable of interest}
 
 \item{pikl}{matrix of second-order (joint) inclusion probabilities; the diagonal
 must contain the first-order inclusion probabilities.}
 
-\item{sample}{boolean indicating if sample values are provided.
-If \code{sample=TRUE}, the function returnss a sample estimate of the variance,
+\item{sample}{logical value indicating whether sample or population values are provided.
+If \code{sample=TRUE}, the function returns a sample estimate of the variance,
 while if \code{sample=FALSE}, the Variance is computed over all population units.
 Default is TRUE.}
 
@@ -40,12 +40,12 @@ The Sen-Yates-Grundy variance is obtained from the Horvitz-Thompson variance
 by conditioning on the sample size n, and is therefore only appliable to
 fixed size sampling designs:
 
-\deqn{\sum_{i\in U}\sum_{j > i} (\pi_i\pi_j - \pi_{ij}) \Bigl(\frac{y_i}{\pi_i} - \frac{y_j}{\pi_j} \Bigr)^2 }{
+\deqn{\sum_{i\in U}\sum_{j > i} (\pi_i\pi_j - \pi_{ij}) \Biggl(\frac{y_i}{\pi_i} - \frac{y_j}{\pi_j} \Biggr)^2 }{
 \sum__U\sum_{j > i} [ \pi(i)\pi(j) - \pi(ij) ] [ y(i)/\pi(i) - y(j)/\pi(j) ]^2 }
 
 Its estimator is
 
-\deqn{\sum_{i\in U}\sum_{j > i} \frac{(\pi_i\pi_j - \pi_{ij})}{\pi_{ij}} \Bigl(\frac{y_i}{\pi_i} - \frac{y_j}{\pi_j} \Bigr)^2 }{
+\deqn{\sum_{i\in U}\sum_{j > i} \frac{(\pi_i\pi_j - \pi_{ij})}{\pi_{ij}} \Biggl(\frac{y_i}{\pi_i} - \frac{y_j}{\pi_j} \Biggr)^2 }{
 \sum__U\sum_{j > i} [ \pi(i)\pi(j) - \pi(ij) ] [ y(i)/\pi(i) - y(j)/\pi(j) ]^2 / \pi(ij) }
 }
 \examples{

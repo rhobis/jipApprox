@@ -24,3 +24,4 @@ Draw a sample by means of Rao-Sampford sampling
 this function is a modified version of function \code{\link[sampling]{UPsampford}},
 in the \pkg{sampling} package.
 }
+\keyword{internal}

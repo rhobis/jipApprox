@@ -13,3 +13,4 @@ pre_tille(pik)
 Computes a matrix with elimination probabilities for each step
 of Tillé's elimination procedure
 }
+\keyword{internal}

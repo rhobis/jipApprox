@@ -7,7 +7,7 @@
 jip_HartleyRao(pik)
 }
 \arguments{
-\item{pik}{numeric, vector of first-order inclusion probabilities for all
+\item{pik}{numeric vector of first-order inclusion probabilities for all
 population units.}
 }
 \description{
@@ -15,3 +15,4 @@ Approximation of joint-inclusion probabilities with precision of order
 \eqn{O(N^{-4})} for the random systematic sampling design
 by Hartley and Rao (1962), pag. 369 eq. 5.15
 }
+\keyword{internal}

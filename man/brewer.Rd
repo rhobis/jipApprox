@@ -24,3 +24,4 @@ Brewer sampling procedure --------------------------------------------------
 this function is a modified version of function \code{\link[sampling]{UPbrewer}},
 from the \pkg{sampling} package.
 }
+\keyword{internal}

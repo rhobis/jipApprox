@@ -7,7 +7,7 @@
 jip_Tille(pik, eps = 1e-06, maxIter = 1000)
 }
 \arguments{
-\item{pik}{numeric, vector of first-order inclusion probabilities for all
+\item{pik}{numeric vector of first-order inclusion probabilities for all
 population units.}
 
 \item{eps}{tolerance value for the convergence of the fixed-point procedure}
@@ -19,3 +19,4 @@ fixed-point procedure}
 Compute the approximation of joint-inclusion probabilities by means of the
 Iterative Proportional Fitting Procedure (IPFP) proposed by Tillé (1996)
 }
+\keyword{internal}

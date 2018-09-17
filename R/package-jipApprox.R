@@ -5,19 +5,19 @@
 #' Function \code{\link{jip_approx}} provides a number of approximations of the
 #' second-order inclusion probabilities that require only the first-order inclusion
 #' probabilities. These approximations may be employed in unequal probability sampling
-#' design with high entropy. A more flexible approximation may be obtained using
+#' design with high entropy. A more flexible approximation may be obtained by using
 #' function \code{\link{jip_MonteCarlo}}, which estimates inclusion probabilities
 #' through a Monte Carlo simulation.
 #'
 #' The variance of the Horvitz-Thompson total estimator may be then estimated by
 #' plugging the approximated joint probabilities into the Horvitz-Thompson or
-#' Sen-Yates-Grundy variance estimator using function \code{HTvar}.
+#' Sen-Yates-Grundy variance estimator using function \code{\link{HTvar}}.
 #'
 #'
 #'
 #' @docType package
 #'
-#' @name UPSvarApprox
+#' @name jipApprox
 #'
 #' @references
 #'

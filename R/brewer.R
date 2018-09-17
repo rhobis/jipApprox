@@ -10,6 +10,7 @@
 #' @note this function is a modified version of function \code{\link[sampling]{UPbrewer}},
 #' from the \pkg{sampling} package.
 #'
+#' @keywords internal
 
 
 brewer <- function(pik, n, N, s, list){
