@@ -76,5 +76,5 @@ More
 ----
 
 - Please, report any bug or issue [here](https://github.com/rhobis/jipApprox/issues).
-- For more information, please contact the manteiner at `roberto.sichera@unipa.it`. 
+- For more information, please contact the maintainer at `roberto.sichera@unipa.it`. 
 
