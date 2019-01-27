@@ -26,6 +26,8 @@
 #' should be created; only applies if \code{write_on_file = TRUE}.
 #' @param by optional; integer scalar indicating every how many replications a partial output
 #' should be saved
+#' @param progress_bar logical, indicating whether a progress bar is desired
+#'
 #'
 #' @details
 #' Argument \code{design} accepts either a string indicating the sampling design
@@ -104,7 +106,8 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
                            write_on_file = FALSE,
                            filename,
                            path,
-                           by = NULL
+                           by = NULL,
+                           progress_bar = TRUE
 ){
 
     ### Check input ------------------------------------------------------------
@@ -207,6 +210,7 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
 
 
 
+
     ### Initialisation ----
     pik <- sampling::inclusionprobabilities(x,n)
     k <- length(units)
@@ -214,7 +218,7 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
         counts <- matrix(0,k,k)
     }else counts <- matrix(1,k,k)
 
-    pb <- txtProgressBar(min = 0, max = replications, style = 3) # Progress bar
+    if( identical(progress_bar, TRUE) ) pb <- txtProgressBar(min = 0, max = replications, style = 3) # Progress bar
 
     if( is.character(design)){
         ### Preliminary computations (for some sampling methods) ---
@@ -257,7 +261,7 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
     set.seed(seed)
     if( write_on_file ){
         for(r in 1:replications){
-            setTxtProgressBar(pb, r)
+            if( identical(progress_bar, TRUE) ) setTxtProgressBar(pb, r)
 
             s <- do.call(smplFUN,pars) ### vector of 0 and 1
             counts <- counts + outer(s[units],s[units], "*")
@@ -276,13 +280,13 @@ jip_MonteCarlo <- function(x, n, replications = 1e06,
     }else{
 
         for(r in 1:replications){
-            setTxtProgressBar(pb, r)
+            if( identical(progress_bar, TRUE) ) setTxtProgressBar(pb, r)
 
             s <- do.call(smplFUN,pars) ### vector of 0 and 1
             counts <- counts + outer(s[units],s[units], "*")
         }
     }
-    close(pb)
+    if( identical(progress_bar, TRUE) ) close(pb)
     ### ----
 
     ### Return estimates ----

@@ -6,7 +6,7 @@
 \usage{
 jip_MonteCarlo(x, n, replications = 1e+06, design, units, seed = NULL,
   as_data_frame = FALSE, design_pars, write_on_file = FALSE, filename,
-  path, by = NULL)
+  path, by = NULL, progress_bar = TRUE)
 }
 \arguments{
 \item{x}{size measure or first-order inclusion probabilities, a vector or single-column data.frame}
@@ -40,6 +40,8 @@ should be created; only applies if \code{write_on_file = TRUE}.}
 
 \item{by}{optional; integer scalar indicating every how many replications a partial output
 should be saved}
+
+\item{progress_bar}{logical, indicating whether a progress bar is desired}
 }
 \value{
 A matrix of estimated inclusion probabilities if \code{as_data_frame=FALSE},
