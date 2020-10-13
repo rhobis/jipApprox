@@ -4,8 +4,16 @@
 \alias{save_output}
 \title{Save partial results}
 \usage{
-save_output(iteration, design_name, counts, units, filename, path, status,
-  as_data_frame)
+save_output(
+  iteration,
+  design_name,
+  counts,
+  units,
+  filename,
+  path,
+  status,
+  as_data_frame
+)
 }
 \arguments{
 \item{iteration}{integer indicating the iterations the simulation is at}

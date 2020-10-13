@@ -4,9 +4,21 @@
 \alias{jip_MonteCarlo}
 \title{Approximate inclusion probabilities by Monte Carlo simulation}
 \usage{
-jip_MonteCarlo(x, n, replications = 1e+06, design, units, seed = NULL,
-  as_data_frame = FALSE, design_pars, write_on_file = FALSE, filename,
-  path, by = NULL, progress_bar = TRUE)
+jip_MonteCarlo(
+  x,
+  n,
+  replications = 1e+06,
+  design,
+  units,
+  seed = NULL,
+  as_data_frame = FALSE,
+  design_pars,
+  write_on_file = FALSE,
+  filename,
+  path,
+  by = NULL,
+  progress_bar = TRUE
+)
 }
 \arguments{
 \item{x}{size measure or first-order inclusion probabilities, a vector or single-column data.frame}
