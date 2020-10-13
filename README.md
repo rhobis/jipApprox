@@ -39,7 +39,7 @@ Usage
 -----
 
 ``` r
-library(UPSvarApprox)
+library(jipApprox)
 
 ### Generate population data ---
 N <- 20; n <- 5

@@ -1,5 +1,10 @@
 #' jipApprox: Approximate inclusion probabilities for survey sampling
 #'
+#' @description
+#' Approximate joint-inclusion probabilities in Unequal Probability Sampling,
+#' or compute Monte Carlo approximations of the first and second-order inclusion
+#' probabilities of a general sampling design as in Fattorini (2006)
+#' <doi:10.1093/biomet/93.2.269>.
 #'
 #' @section Approximation of Joint-inclusion probabilities:
 #' Function \code{\link{jip_approx}} provides a number of approximations of the
@@ -32,7 +37,7 @@
 #' Fattorini, L. 2006.
 #' Applying the Horvitz-Thompson criterion in complex designs: A computer-intensive
 #' perspective for estimating inclusion probabilities.
-#' Biometrika 93 (2), 269–278
+#' Biometrika 93 (2), 269-278
 #'
 #'
 #' @importFrom stats rmultinom runif
