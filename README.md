@@ -1,9 +1,10 @@
 jipApprox
 ======================================================
 
-[![Travis-CI Build Status](https://travis-ci.org/rhobis/jipApprox.svg?branch=master)](https://travis-ci.org/rhobis/jipApprox)
+[![Build Status](https://travis-ci.com/rhobis/jipApprox.svg?branch=master)](https://travis-ci.com/rhobis/jipApprox)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/UPSvarApprox)](https://cran.r-project.org/package=jipApprox)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/jipApprox)](https://cran.r-project.org/package=jipApprox)
+[![R badge](https://img.shields.io/badge/-Support%20me-brightgreen)](https://www.buymeacoffee.com/rhobis)
 
 Description 
 -----------------
@@ -76,5 +77,11 @@ More
 ----
 
 - Please, report any bug or issue [here](https://github.com/rhobis/jipApprox/issues).
-- For more information, please contact the maintainer at `roberto.sichera@unipa.it`. 
+- For more information, please contact the maintainer at `rob.sichera@gmail.com`. 
+
+<br/>
+
+<a href="https://www.buymeacoffee.com/rhobis" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="217" height="60"></a>
+
+<br/>
 
