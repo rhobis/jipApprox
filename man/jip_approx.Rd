@@ -37,10 +37,10 @@ Hartley and Rao (1962) proposed the following approximation under
 randomised systematic sampling [\code{method="HartleyRao"}]:
 
 \deqn{\tilde{\pi}_{ij} = \frac{n-1}{n} \pi_i\pi_j + \frac{n-1}{n^2} (\pi_i^2 \pi_j + \pi_i \pi_j^2)
-      - \frac{n-1}{n^3}\pi_i\pi_j \sum_{i\in U} \pi_j^2}{}
+      - \frac{n-1}{n^3}\pi_i\pi_j \sum_{i\in U} \pi_j^2}
 
 \deqn{ + \frac{2(n-1)}{n^3} (\pi_i^3 \pi_j + \pi_i\pi_j^3 + \pi_i^2 \pi_j^2)
-      - \frac{3(n-1)}{n^4} (\pi_i^2 \pi_j + \pi_i\pi_j^2) \sum_{i \in U}\pi_i^2}{}
+      - \frac{3(n-1)}{n^4} (\pi_i^2 \pi_j + \pi_i\pi_j^2) \sum_{i \in U}\pi_i^2}
 
 \deqn{+ \frac{3(n-1)}{n^5} \pi_i\pi_j \biggl( \sum_{i\in U} \pi_i^2 \biggr)^2
       - \frac{2(n-1)}{n^4} \pi_i\pi_j \sum_{i \in U} \pi_j^3  }{*see pdf version of documentation*}
@@ -56,7 +56,7 @@ where the coefficients \eqn{\beta_i}{\beta} are computed iteratively through the
         \Biggl( \frac{n(n-1)}{(\beta^(2k-1))^2 - \sum_{i\in U} (\beta_k^{(2k-1)})^2 } \Biggr)^(1/2) }{
         \beta(2k) = \beta(2k-1) ( n(n-1) / ( (\sum\beta(2k-1))^2 - \sum( \beta(2k-1)^2 ) ) )^{(1/2)} }
     }
-    with \eqn{\beta^{(k)} = \sum_{i\in U} \beta_i^{i}, \,\, k=1,2,3, \dots }{}
+    with \eqn{\beta^{(k)} = \sum_{i\in U} \beta_i^{i}, \,\, k=1,2,3, \dots }
 
 Finally, Brewer (2002) and Brewer and Donadio (2003) proposed four approximations,
 which are defined by the general form
