@@ -1,7 +1,7 @@
 jipApprox
 ======================================================
 
-[![Build Status](https://travis-ci.com/rhobis/jipApprox.svg?branch=master)](https://travis-ci.com/rhobis/jipApprox)
+[![Build Status](https://app.travis-ci.com/github/rhobis/jipApprox.svg?branch=master)](https://app.travis-ci.com/github/rhobis/jipApprox)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/UPSvarApprox)](https://cran.r-project.org/package=jipApprox)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/jipApprox)](https://cran.r-project.org/package=jipApprox)
 [![R badge](https://img.shields.io/badge/-Support%20me-brightgreen)](https://www.buymeacoffee.com/rhobis)
