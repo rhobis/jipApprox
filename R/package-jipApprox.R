@@ -20,9 +20,6 @@
 #'
 #'
 #'
-#' @docType package
-#'
-#' @name jipApprox
 #'
 #' @references
 #'
@@ -42,4 +39,4 @@
 #'
 #' @importFrom stats rmultinom runif
 #' @importFrom utils combn setTxtProgressBar txtProgressBar write.table
-NULL
+"_PACKAGE"
